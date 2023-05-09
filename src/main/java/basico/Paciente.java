@@ -1,6 +1,6 @@
 package basico;
 
-public class Paciente extends Usuario{
+public class Paciente extends Usuario implements UsuarioInt{
 	
 	private String patologia;
 
@@ -8,8 +8,8 @@ public class Paciente extends Usuario{
 		
 	}
 	
-	public Paciente(String patologia) {
-		this();
+	public Paciente(int dni, String nombre, String apellido, String password, String patologia) {
+		super(dni, nombre, apellido, password);
 		this.patologia = patologia;
 	}
 

@@ -27,7 +27,8 @@ public class PanelLogin extends JPanel implements ActionListener {
 	private PanelManager panelManager;
 	
 	private UsuarioService usuarioServ;
-	private Usuario usuarioLogin;
+	//private Usuario usuarioLogin;
+	int rol;
 
 	/**
 	 * Create the panel.
@@ -70,7 +71,7 @@ public class PanelLogin extends JPanel implements ActionListener {
 		botonOK.addActionListener(this);
 		add(botonOK);
 		
-		botonCancel = new JButton("Cancelar");
+		botonCancel = new JButton("Salir");
 		botonCancel.setBounds(246, 228, 89, 23);
 		botonCancel.addActionListener(this);
 		add(botonCancel);
@@ -78,20 +79,20 @@ public class PanelLogin extends JPanel implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==botonOK) {
-			//System.out.println("Boton ok");
 			usuarioServ= new UsuarioService();
 			try {
-				usuarioLogin= usuarioServ.autenticarUsuario(Integer.parseInt(usuarioTxt.getText()), String.format("%s", new String(passwordTxt.getPassword())));
-				System.out.println("Logueo exitoso");
-				//TODO
-				/*
-				if (usuarioLogin.getRol().equals("admin")) {
+				rol= usuarioServ.autenticarUsuario(Integer.parseInt(usuarioTxt.getText()), String.format("%s", new String(passwordTxt.getPassword())));
+				
+				if(rol== 1) {
 					panelManager.mostrarPanelAdmin();
-				} else if (usuarioLogin.getRol().equals("cliente")) {
+				} else if(rol == 2) {
+					System.out.println("Es un paciente");
+					//TODO
 					
-					panelManager.mostrarPanelCliente(usuarioLogin);
+				} else {
+					panelManager.mostrarError("Usuario no habilitado");
 				}
-				*/
+				
 			} catch(ServicioException es) {
 				panelManager.mostrarError(es);
 			} catch (java.lang.NumberFormatException es) {
@@ -101,7 +102,6 @@ public class PanelLogin extends JPanel implements ActionListener {
 			limpiarFormulario();
 		} else if (e.getSource()==botonCancel) {
 			panelManager.mostrarSalir();
-			//System.out.println("Boton cancelar");
 		}
 	}
 

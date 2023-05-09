@@ -10,6 +10,10 @@ public class PanelManager {
 
 	private JFrame frame;
 	private PanelLogin pantallaLogin;
+	private PanelAdmin pantallaAdmin;
+	private PanelAltaUsuario pantallaAltaUsuario;
+	private PanelModificacionUsuario pantallaModificacionUsuario;
+	private PanelBajaUsuario pantallaBajaUsuario;
 	
 	public void armarManager() {
 		
@@ -21,6 +25,10 @@ public class PanelManager {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		pantallaLogin= new PanelLogin(this);
+		pantallaAdmin= new PanelAdmin(this);
+		pantallaAltaUsuario= new PanelAltaUsuario(this);
+		pantallaModificacionUsuario= new PanelModificacionUsuario(this);
+		pantallaBajaUsuario= new PanelBajaUsuario(this);
 		
 		
 	}
@@ -36,11 +44,31 @@ public class PanelManager {
 		
 	}
 	
+	public void mostrarPanelAdmin() {
+		mostrarPanel(pantallaAdmin);
+	}
+	
+	public void mostrarPanelAltaUsuario() {
+		mostrarPanel(pantallaAltaUsuario);
+	}
+	
+	public void mostrarPanelModificacionUsuario() {
+		mostrarPanel(pantallaModificacionUsuario);
+	}
+	
+	public void mostrarPanelBajaUsuario() {
+		mostrarPanel(pantallaBajaUsuario);
+	}
+	
 	public void mostrarSalir() {
 		int resultado= JOptionPane.showConfirmDialog(frame, "¿Está seguro que quiere salir?", "Confirmación", JOptionPane.YES_NO_OPTION);
 		if (resultado==JOptionPane.YES_OPTION) {
 			System.exit(0);
 		}
+	}
+	
+	public void mostrarOperExitosa() {
+		JOptionPane.showMessageDialog(frame, "Operación exitosa", "Resultado", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void mostrarError(Exception e) {
