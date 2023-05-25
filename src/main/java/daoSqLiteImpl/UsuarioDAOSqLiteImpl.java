@@ -105,6 +105,33 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
         return resultado;
 	}
 	
+	public int obtenerDNIPaciente(String nombre, String apellido) throws DAOException {
+		int resultado;
+		
+		conectar();
+		
+		try {
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM usuario WHERE nombre= ? and apellido= ?");
+			ps.setString(1, nombre);
+			ps.setString(2, apellido);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			 if (rs.next()) {	
+	            	UsuarioInt paciente= contruirUsuario(rs);
+	            	resultado= paciente.getDni();
+	            } else {
+	            	throw new DAOException("No existe el usuario");
+	            }
+			
+		} catch (SQLException e) {
+        	throw new DAOException("Error al buscar paciente");
+        } finally {
+            cerrarConexion();
+        }
+        return resultado;
+	}
+	
 	public void modificarUsuario(UsuarioInt unUsuario) throws DAOException{
 		
 		conectar();

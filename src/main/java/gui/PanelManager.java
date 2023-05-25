@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import basico.Paciente;
+
 public class PanelManager {
 
 	private JFrame frame;
@@ -14,6 +16,12 @@ public class PanelManager {
 	private PanelAltaUsuario pantallaAltaUsuario;
 	private PanelModificacionUsuario pantallaModificacionUsuario;
 	private PanelBajaUsuario pantallaBajaUsuario;
+	private PanelAltaTerapista pantallaAltaTerapista;
+	private PanelAltaTurno pantallaAltaTurno;
+	private PanelBMTurno pantallaBMTurno;
+	
+	private PanelUsuario pantallaUsuario;
+	private PanelSolicitarTurno pantallaSolicitarTurno;
 	
 	public void armarManager() {
 		
@@ -29,6 +37,12 @@ public class PanelManager {
 		pantallaAltaUsuario= new PanelAltaUsuario(this);
 		pantallaModificacionUsuario= new PanelModificacionUsuario(this);
 		pantallaBajaUsuario= new PanelBajaUsuario(this);
+		pantallaAltaTerapista= new PanelAltaTerapista(this);
+		pantallaAltaTurno= new PanelAltaTurno(this);
+		pantallaBMTurno= new PanelBMTurno(this);
+		
+		pantallaUsuario= new PanelUsuario(this);
+		pantallaSolicitarTurno= new PanelSolicitarTurno(this);
 		
 		
 	}
@@ -58,6 +72,30 @@ public class PanelManager {
 	
 	public void mostrarPanelBajaUsuario() {
 		mostrarPanel(pantallaBajaUsuario);
+	}
+	
+	public void mostrarPanelAltaTerapista() {
+		mostrarPanel(pantallaAltaTerapista);
+	}
+	
+	public void mostrarPanelAltaTurno() {
+		pantallaAltaTurno.llenarComboTerapista();
+		mostrarPanel(pantallaAltaTurno);
+	}
+	
+	public void mostrarPanelBMTurno() {
+		mostrarPanel(pantallaBMTurno);
+	}
+	
+	public void mostrarPanelUsuario(Paciente unPaciente) {
+		pantallaUsuario.setPaciente(unPaciente);
+		mostrarPanel(pantallaUsuario);
+	}
+	
+	public void mostrarPanelSolicitarTurno(Paciente unPaciente) {
+		pantallaSolicitarTurno.setPaciente(unPaciente);
+		pantallaSolicitarTurno.llenarComboTerapista();
+		mostrarPanel(pantallaSolicitarTurno);
 	}
 	
 	public void mostrarSalir() {

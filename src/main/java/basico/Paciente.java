@@ -20,6 +20,11 @@ public class Paciente extends Usuario implements UsuarioInt{
 	public void setPatologia(String patologia) {
 		this.patologia = patologia;
 	}
+
+	
+	public String toString() {
+		return getNombre() + " " + getApellido();
+	}
 	
 	
 	

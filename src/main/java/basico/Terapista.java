@@ -29,9 +29,9 @@ public class Terapista {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	
-	
-	
-	
+
+	public String toString() {
+		return nombre + " " + apellido;
+	}
 
 }

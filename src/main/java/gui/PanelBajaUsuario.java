@@ -36,6 +36,7 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 	
 	private Boolean datosCargados= false;
 	private JTextField rolTxt;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -236,6 +237,4 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		this.datosCargados = datosCargados;
 	}
 	
-	
-
 }

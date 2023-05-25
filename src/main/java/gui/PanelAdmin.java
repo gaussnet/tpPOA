@@ -25,13 +25,13 @@ public class PanelAdmin extends JPanel {
 	
 	private JButton botonCrearTurno;
 	private JButton botonModificarTurno;
-	private JButton botonBorrarTurno;
+	//private JButton botonBorrarTurno;
 	
 	private JButton botonCrearTerapista;
 	private JButton botonModificarTerapista;
 	private JButton botonBorrarTerapista;
 	
-	public PanelAdmin(PanelManager manager ) {
+	public PanelAdmin(PanelManager manager) {
 		this.panelManager= manager;
 		armarPanel();
 	}
@@ -52,12 +52,12 @@ public class PanelAdmin extends JPanel {
 		
 		panelOpcionesTurnos= new JPanel();
 		botonCrearTurno= new JButton("Crear turno");
-		botonModificarTurno= new JButton("Modificar turno");
-		botonBorrarTurno= new JButton("Borrar turno");
+		botonModificarTurno= new JButton("Gestionar turnos");
+		//botonBorrarTurno= new JButton("Borrar turno");
 		
 		panelOpcionesTurnos.add(botonCrearTurno);
 		panelOpcionesTurnos.add(botonModificarTurno);
-		panelOpcionesTurnos.add(botonBorrarTurno);
+		//panelOpcionesTurnos.add(botonBorrarTurno);
 		
 		panelOpcionesTerapistas= new JPanel();
 		botonCrearTerapista= new JButton("Crear terapista");
@@ -94,6 +94,25 @@ public class PanelAdmin extends JPanel {
 				panelManager.mostrarPanelBajaUsuario();
 			}
 		});
+		
+		botonCrearTerapista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelAltaTerapista();
+			}
+		});
+		
+		botonCrearTurno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelAltaTurno();
+			}
+		});
+		
+		botonModificarTurno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelBMTurno();
+			}
+		});
+		
 		//TODO Crear los actionListener restantes
 		
 		panelSalir.add(botonSalir);
@@ -104,8 +123,6 @@ public class PanelAdmin extends JPanel {
 		
 		this.add(panelFichas);
 		this.add(panelSalir);
-		
-		
 		
 	}
 }

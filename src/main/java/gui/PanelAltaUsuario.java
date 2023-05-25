@@ -152,22 +152,28 @@ public class PanelAltaUsuario extends JPanel implements ActionListener {
 			usuarioServ= new UsuarioService();
 			
 			try {
-				if(pacienteRadioButton.isSelected()) {
-					this.setUsuario(new Paciente(Integer.parseInt(this.getDniTxt().getText()), this.getNombreTxt().getText(), 
-							this.getApellidoTxt().getText(), String.format("%s", new String(this.getPasswordTxt().getPassword())), this.getPatologiaTxt().getText()));	
+				if(dniTxt.getText().isEmpty() || nombreTxt.getText().isEmpty() || apellidoTxt.getText().isEmpty() || passwordTxt.getPassword().length == 0 || 
+						(!pacienteRadioButton.isSelected() && !adminRadioButton.isSelected())) {
+					panelManager.mostrarError("Datos incompletos");
+				} else {
+					if(pacienteRadioButton.isSelected()) {
+						this.setUsuario(new Paciente(Integer.parseInt(this.getDniTxt().getText()), this.getNombreTxt().getText(), 
+								this.getApellidoTxt().getText(), String.format("%s", new String(this.getPasswordTxt().getPassword())), this.getPatologiaTxt().getText()));	
+						
+						usuarioServ.crearPaciente((Paciente)usuario);
+						
+					} else if (adminRadioButton.isSelected()) {
+						this.setUsuario(new Administrador(Integer.parseInt(this.getDniTxt().getText()), this.getNombreTxt().getText(), 
+								this.getApellidoTxt().getText(), String.format("%s", new String(this.getPasswordTxt().getPassword()))));
+						
+						usuarioServ.crearAdmin((Administrador)usuario);
+					}
 					
-					usuarioServ.crearPaciente((Paciente)usuario);
-					
-				} else if (adminRadioButton.isSelected()) {
-					this.setUsuario(new Administrador(Integer.parseInt(this.getDniTxt().getText()), this.getNombreTxt().getText(), 
-							this.getApellidoTxt().getText(), String.format("%s", new String(this.getPasswordTxt().getPassword()))));
-					
-					usuarioServ.crearAdmin((Administrador)usuario);
+					limpiarFormulario();
+					panelManager.mostrarOperExitosa();
+					panelManager.mostrarPanelAdmin();
 				}
 				
-				limpiarFormulario();
-				panelManager.mostrarOperExitosa();
-				panelManager.mostrarPanelAdmin();
 			} catch (ServicioException es) {
 				panelManager.mostrarError(es);
 			} catch (java.lang.NumberFormatException es) {

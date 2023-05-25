@@ -141,7 +141,6 @@ public class PanelModificacionUsuario extends JPanel implements ActionListener {
 		this.setUsuarioServ(new UsuarioService());
 		
 		if(e.getSource()== botonOk) {
-			//System.out.println("Boton ok");
 			if (this.getDatosCargados()) {
 				try {
 					if(this.getUsuario() instanceof Paciente) {

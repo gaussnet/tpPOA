@@ -9,6 +9,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import basico.Paciente;
 import basico.Usuario;
 import exceptions.ServicioException;
 import service.UsuarioService;
@@ -28,6 +29,7 @@ public class PanelLogin extends JPanel implements ActionListener {
 	
 	private UsuarioService usuarioServ;
 	//private Usuario usuarioLogin;
+	private Paciente pacienteLogin;
 	int rol;
 
 	/**
@@ -86,8 +88,8 @@ public class PanelLogin extends JPanel implements ActionListener {
 				if(rol== 1) {
 					panelManager.mostrarPanelAdmin();
 				} else if(rol == 2) {
-					System.out.println("Es un paciente");
-					//TODO
+					pacienteLogin= (Paciente) usuarioServ.buscarUsuario(Integer.parseInt(usuarioTxt.getText()));
+					panelManager.mostrarPanelUsuario(pacienteLogin);
 					
 				} else {
 					panelManager.mostrarError("Usuario no habilitado");

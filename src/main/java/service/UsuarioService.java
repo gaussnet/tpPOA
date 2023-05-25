@@ -75,5 +75,19 @@ public class UsuarioService {
     	}
     	return rol;
     }
+	
+	/*
+	public Paciente obtenerPaciente(int dni, String password) throws ServicioException {
+		UsuarioDAO dao=  new UsuarioDAOSqLiteImpl();
+		Paciente paciente;
+		try {
+			paciente= dao.obtenerPaciente(dni, password);
+		} catch (DAOException e) {
+    		throw new ServicioException(e);
+    	}
+		
+		return paciente;
+	}
+	*/
 
 }

@@ -3,6 +3,7 @@ package basico;
 import java.time.LocalDateTime;
 
 public class Turno {
+	private int nroTurno;
 	private LocalDateTime fechaDesde;
 	private LocalDateTime fechaHasta;
 	private Paciente asigandoA;
@@ -21,6 +22,16 @@ public class Turno {
 		this.asigandoA = asigandoA;
 		this.terapista = terapista;
 		this.tomado = tomado;
+	}
+	
+	
+
+	public int getNroTurno() {
+		return nroTurno;
+	}
+
+	public void setNroTurno(int nroTurno) {
+		this.nroTurno = nroTurno;
 	}
 
 	public LocalDateTime getFechaDesde() {
@@ -63,6 +74,4 @@ public class Turno {
 		this.tomado = tomado;
 	}
 	
-	
-
 }
