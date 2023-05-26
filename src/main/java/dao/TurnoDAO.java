@@ -24,5 +24,7 @@ public interface TurnoDAO {
 	
 	//public void asignarTurno(int nroTurno, String nombrePaciente, String apellidoPaciente) throws DAOException;
 	public void asignarTurno(int nroTurno, int dniPaciente) throws DAOException;
+	
+	public List<Turno> obtenerTurnosHistoricoTomadoPaciente(int dniPaciente, String fechaDesde, String fechaHasta) throws DAOException;
 
 }

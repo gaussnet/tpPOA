@@ -54,7 +54,7 @@ public class TurnoTableModel extends AbstractTableModel {
 			//result= FechaUtil.getFechaMostrable(t.getFechaHasta());
 			//break;
 		case COLUMNA_PACIENTE:
-			result= t.getAsigandoA();
+			result= t.getAsignadoA();
 			break;
 		case COLUMNA_TERAPISTA:
 			result= t.getTerapista();

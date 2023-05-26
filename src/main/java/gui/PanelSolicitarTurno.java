@@ -57,7 +57,8 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 		
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JLabel lblOperacion = new JLabel("Solicitud nuevo turno");
@@ -149,7 +150,8 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void limpiarFormulario() {
+	//se cambia public por private 25/05
+	private void limpiarFormulario() {
 		//terapistaComboBox.setSelectedIndex(0);
 		terapistaComboBox.removeAllItems();
 		panelListaTurnos.getModelo().getContenido().clear();

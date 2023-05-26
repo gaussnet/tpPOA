@@ -4,6 +4,9 @@ import exceptions.DAOException;
 import exceptions.ServicioException;
 import utilidades.FechaUtil;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 //import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
@@ -12,6 +15,10 @@ import java.time.temporal.TemporalAdjusters;
 //import java.util.Date;
 //import java.util.GregorianCalendar;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import basico.Paciente;
 import basico.Terapista;
@@ -94,6 +101,7 @@ public class TurnoService {
         }
 	}
 	
+	//Por administrador
 	public void liberarTurno(int nroTurno, LocalDateTime fechaInicio) throws ServicioException {
 		TurnoDAO dao= new TurnoDAOSqLiteImpl();
 		
@@ -149,5 +157,74 @@ public class TurnoService {
             throw new ServicioException(e);
         }
 	}
-
+	
+	public List<Turno> obtenerTurnosPaciente(Paciente paciente) throws ServicioException {
+		TurnoDAO dao= new TurnoDAOSqLiteImpl();
+		List<Turno> listaTurnos;
+		
+		LocalDateTime fechaActual= LocalDateTime.now();
+		String fechaActualString= FechaUtil.localDateTimeToString(fechaActual);
+		
+		try {
+			listaTurnos= dao.obtenerTurnosPaciente(paciente.getDni(), fechaActualString);
+		} catch (DAOException e) {
+            throw new ServicioException(e);
+        }
+		
+		return listaTurnos;
+	}
+	
+	//Por paciente
+	public void liberarTurnoPaciente(int nroTurno, LocalDateTime fechaInicio) throws ServicioException {
+		TurnoDAO dao= new TurnoDAOSqLiteImpl();
+		
+		try {
+			LocalDateTime fechaActual= LocalDateTime.now();
+			
+			if(fechaInicio.getDayOfMonth() == fechaActual.getDayOfMonth()) {
+				Exception ex= new Exception("No puede cancelar un turno el mismo día");
+				throw new ServicioException(ex);
+			}
+			dao.liberarTurno(nroTurno);
+		} catch (DAOException e) {
+            throw new ServicioException(e);
+        }
+	}
+	
+	public List<Turno> obtenerTurnosHistoricoTomadoPaciente(Paciente paciente) throws ServicioException {
+		TurnoDAO dao= new TurnoDAOSqLiteImpl();
+		List<Turno> listaTurnos;
+		
+		LocalDateTime fechaActual= LocalDateTime.now();
+		String fechaActualString= FechaUtil.localDateTimeToString(fechaActual);
+		
+		LocalDateTime fechaInicio= fechaActual.minusMonths(1);
+		String fechaInicioString= FechaUtil.localDateTimeToString(fechaInicio);
+		
+		try {
+			listaTurnos= dao.obtenerTurnosHistoricoTomadoPaciente(paciente.getDni(), fechaInicioString, fechaActualString);
+		} catch (DAOException e) {
+            throw new ServicioException(e);
+        }
+		
+		return listaTurnos;
+	}
+	
+	/*
+	public void exportarHistorial(List<Turno> listaTurnos) throws ServicioException {
+		Workbook libro= new XSSFWorkbook();
+		Sheet hoja= libro.createSheet("Historial turnos");
+		
+		try {
+			OutputStream output= new FileOutputStream("historicoTurnos.xlsx");
+			libro.write(output);
+			
+			libro.close();
+			output.close();
+		} catch (IOException e) {
+			//Exception e= new Exception("No se pudo exportar el historial");
+            throw new ServicioException(e);
+        }
+	}
+	*/
 }

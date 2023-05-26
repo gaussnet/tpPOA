@@ -21,7 +21,8 @@ public class PanelBuscaFecha extends JPanel {
 		armarPanel();
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		
 		inicioLbl = new JLabel("Inicio:");
 		inicioLbl.setHorizontalAlignment(SwingConstants.LEFT);

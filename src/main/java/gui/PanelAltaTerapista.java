@@ -39,7 +39,8 @@ public class PanelAltaTerapista extends JPanel implements ActionListener {
 		
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(410, 242));
 		
@@ -106,7 +107,8 @@ public class PanelAltaTerapista extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void limpiarFormulario() {
+	//se cambia public por private 25/05
+	private void limpiarFormulario() {
 		nombreTxt.setText("");
 		apellidoTxt.setText("");
 	}

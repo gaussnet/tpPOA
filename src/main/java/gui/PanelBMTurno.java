@@ -52,7 +52,8 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		//setLayout(null);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		//this.setPreferredSize(new Dimension(446, 451));
@@ -180,7 +181,8 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void limpiarFormulario() {
+	//se cambia public por private 25/05
+	private void limpiarFormulario() {
 		panelBuscaFecha.getDiaChooserInicio().setDate(null);
 		panelBuscaFecha.getDiaChooserFin().setDate(null);
 		
@@ -190,11 +192,13 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		
 	}
 
-	public PanelListaTurnos getPanelListaTurnos() {
+	//se cambia public por private 25/05
+	private PanelListaTurnos getPanelListaTurnos() {
 		return panelListaTurnos;
 	}
 
-	public void setPanelListaTurnos(PanelListaTurnos panelListaTurnos) {
+	//se cambia public por private 25/05
+	private void setPanelListaTurnos(PanelListaTurnos panelListaTurnos) {
 		this.panelListaTurnos = panelListaTurnos;
 	}
 

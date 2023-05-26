@@ -1,12 +1,14 @@
 package basico;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Turno {
 	private int nroTurno;
 	private LocalDateTime fechaDesde;
 	private LocalDateTime fechaHasta;
-	private Paciente asigandoA;
+	private Paciente asignadoA;
 	private Terapista terapista;
 	private Boolean tomado= false;
 	
@@ -19,12 +21,24 @@ public class Turno {
 		this();
 		this.fechaDesde = fechaDesde;
 		this.fechaHasta = fechaHasta;
-		this.asigandoA = asigandoA;
+		this.asignadoA = asigandoA;
 		this.terapista = terapista;
 		this.tomado = tomado;
 	}
 	
-	
+	/*
+	public List<Object> obtenerValores() {
+		List<Object> valores= new ArrayList<>();
+		valores.add(nroTurno);
+		valores.add(fechaDesde);
+		valores.add(fechaHasta);
+		valores.add(asignadoA);
+		valores.add(terapista);
+		valores.add(tomado);
+		
+		return valores;
+	}
+	*/
 
 	public int getNroTurno() {
 		return nroTurno;
@@ -50,12 +64,12 @@ public class Turno {
 		this.fechaHasta = fechaHasta;
 	}
 
-	public Paciente getAsigandoA() {
-		return asigandoA;
+	public Paciente getAsignadoA() {
+		return asignadoA;
 	}
 
-	public void setAsigandoA(Paciente asigandoA) {
-		this.asigandoA = asigandoA;
+	public void setAsignadoA(Paciente asignadoA) {
+		this.asignadoA = asignadoA;
 	}
 
 	public Terapista getTerapista() {

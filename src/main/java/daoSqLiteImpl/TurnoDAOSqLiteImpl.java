@@ -266,8 +266,39 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 		}
 	}
 	
+	public List<Turno> obtenerTurnosHistoricoTomadoPaciente(int dniPaciente, String fechaDesde, String fechaHasta) throws DAOException {
+		List<Turno> lista= new ArrayList<>();
+		Turno turno;
+		
+		try {
+			conectar();
+			String fechaDesdeTruncada= fechaDesde.split("T")[0];
+			String fechaHastaTruncada= fechaHasta.split("T")[0];
+			
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ? and paciente = ? and tomado = 1");
+			ps.setString(1, fechaDesdeTruncada);
+			ps.setString(2, fechaHastaTruncada);
+			ps.setInt(3, dniPaciente);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			while (rs.next()) {
+				turno= construirTurno(rs);
+				lista.add(turno);
+			}
+			
+		} catch (SQLException e) {
+        	throw new DAOException("Error al listar turnos");
+        } finally {
+            cerrarConexion();
+        }
+		
+		return lista;
+		
+	}
 	
-	public Turno construirTurno(ResultSet rs) throws SQLException, DAOException {
+	//Se cambio public por private 25/05/2023
+	private Turno construirTurno(ResultSet rs) throws SQLException, DAOException {
 		Turno turno= new Turno();
 		Paciente paciente= null;
 		Terapista terapista= null;
@@ -285,7 +316,7 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 		
 		try {
 			if(rs.getInt("paciente") == 0) {
-				turno.setAsigandoA(null);
+				turno.setAsignadoA(null);
 			} else {
 				PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM usuario WHERE dni= ?");
 	        	ps.setInt(1, rs.getInt("paciente"));
@@ -300,7 +331,7 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 	            	paciente.setApellido(rsPaciente.getString("apellido"));
 	            	paciente.setPassword(rsPaciente.getString("Password"));
 	            	paciente.setPatologia(rsPaciente.getString("patologia"));
-	            	turno.setAsigandoA(paciente);
+	            	turno.setAsignadoA(paciente);
 	            } else {
 	            	throw new DAOException("No existe el usuario");
 	            }

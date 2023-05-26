@@ -199,7 +199,8 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
 		
 	}
 	
-	public UsuarioInt contruirUsuario(ResultSet rs) throws SQLException {
+	//Se cambia public por private 25/04/2023
+	private UsuarioInt contruirUsuario(ResultSet rs) throws SQLException {
 		
 		UsuarioInt usuario = null;
 		

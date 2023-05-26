@@ -41,7 +41,8 @@ public class PanelLogin extends JPanel implements ActionListener {
 
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(449, 300));
 		//this.setSize(new Dimension(300, 300));
@@ -107,7 +108,8 @@ public class PanelLogin extends JPanel implements ActionListener {
 		}
 	}
 
-	public void limpiarFormulario() {
+	//se cambia public por private 25/05
+	private void limpiarFormulario() {
 		this.getUsuarioTxt().setText("");
 		this.getPasswordTxt().setText("");
 	}

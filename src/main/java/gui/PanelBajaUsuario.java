@@ -45,7 +45,8 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		armarPanel();
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(449, 300));
 		
@@ -166,7 +167,8 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		
 	}
 	
-	public void limpiarFormulario() {
+	//se cambia public por private 25/05
+	private void limpiarFormulario() {
 		dniTxt.setText("");
 		nombreTxt.setText("");
 		apellidoTxt.setText("");
@@ -179,7 +181,8 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		
 	}
 	
-	public void llenarFormulario(UsuarioInt usu) {
+	//se cambia public por private 25/05
+	private void llenarFormulario(UsuarioInt usu) {
 		dniTxt.setText(String.valueOf(usu.getDni()));
 		nombreTxt.setText(usu.getNombre());
 		apellidoTxt.setText(usu.getApellido());
@@ -199,7 +202,8 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		
 	}
 	
-	public void buscar() {
+	//se cambia public por private 25/05
+	private void buscar() {
 		try {
 			this.setUsuario(this.getUsuarioServ().buscarUsuario(Integer.parseInt(dniTxt.getText())));
 			llenarFormulario(this.getUsuario());

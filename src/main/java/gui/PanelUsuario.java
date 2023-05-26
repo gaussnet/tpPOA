@@ -28,7 +28,8 @@ public class PanelUsuario extends JPanel {
 		
 	}
 	
-	public void armarPanel() {
+	//se cambia public por private 25/05
+	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(323, 256));
 		
@@ -49,15 +50,17 @@ public class PanelUsuario extends JPanel {
 		});
 		
 		JButton btnVerTurnos = new JButton("Ver turnos");
-		btnVerTurnos.setBounds(20, 119, 120, 23);
+		btnVerTurnos.setBounds(178, 56, 120, 23);
 		add(btnVerTurnos);
 		
-		JButton btnCancelarTurno = new JButton("Cancelar turno");
-		btnCancelarTurno.setBounds(178, 56, 120, 23);
-		add(btnCancelarTurno);
+		btnVerTurnos.addActionListener(new ActionListener( ) {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelVerTurnos(paciente);
+			}
+		});
 		
 		JButton btnHistorial = new JButton("Historial");
-		btnHistorial.setBounds(178, 119, 120, 23);
+		btnHistorial.setBounds(103, 119, 120, 23);
 		add(btnHistorial);
 		
 		JButton btnSalir = new JButton("Cerrar sesión");

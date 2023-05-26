@@ -1,6 +1,7 @@
 package basico;
 
-public class Usuario {
+//Se agregó abstract 25/05/2023
+public abstract class Usuario {
 
 	private int dni;
 	private String nombre;

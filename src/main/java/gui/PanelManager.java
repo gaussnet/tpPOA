@@ -19,9 +19,11 @@ public class PanelManager {
 	private PanelAltaTerapista pantallaAltaTerapista;
 	private PanelAltaTurno pantallaAltaTurno;
 	private PanelBMTurno pantallaBMTurno;
+	private PanelHistorialTurnos pantallaHistorialTurnos;
 	
 	private PanelUsuario pantallaUsuario;
 	private PanelSolicitarTurno pantallaSolicitarTurno;
+	private PanelVerTurnos pantallaVerTurnos;
 	
 	public void armarManager() {
 		
@@ -40,9 +42,11 @@ public class PanelManager {
 		pantallaAltaTerapista= new PanelAltaTerapista(this);
 		pantallaAltaTurno= new PanelAltaTurno(this);
 		pantallaBMTurno= new PanelBMTurno(this);
+		pantallaHistorialTurnos= new PanelHistorialTurnos(this);
 		
 		pantallaUsuario= new PanelUsuario(this);
 		pantallaSolicitarTurno= new PanelSolicitarTurno(this);
+		pantallaVerTurnos= new PanelVerTurnos(this);
 		
 		
 	}
@@ -87,6 +91,10 @@ public class PanelManager {
 		mostrarPanel(pantallaBMTurno);
 	}
 	
+	public void mostrarPanelHistorialTurnos() {
+		mostrarPanel(pantallaHistorialTurnos);
+	}
+	
 	public void mostrarPanelUsuario(Paciente unPaciente) {
 		pantallaUsuario.setPaciente(unPaciente);
 		mostrarPanel(pantallaUsuario);
@@ -96,6 +104,12 @@ public class PanelManager {
 		pantallaSolicitarTurno.setPaciente(unPaciente);
 		pantallaSolicitarTurno.llenarComboTerapista();
 		mostrarPanel(pantallaSolicitarTurno);
+	}
+	
+	public void mostrarPanelVerTurnos(Paciente paciente) {
+		pantallaVerTurnos.setPaciente(paciente);
+		pantallaVerTurnos.llenarListaTurnos(paciente);
+		mostrarPanel(pantallaVerTurnos);
 	}
 	
 	public void mostrarSalir() {
