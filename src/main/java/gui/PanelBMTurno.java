@@ -52,15 +52,13 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 
 	}
 	
-	//se cambia public por private 25/05
+
 	private void armarPanel() {
-		//setLayout(null);
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		//this.setPreferredSize(new Dimension(446, 451));
 		
 		JLabel operacionLbl = new JLabel("Gestión de turnos");
 		operacionLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		//operacionLbl.setBounds(10, 11, 430, 14);
 		add(operacionLbl);
 		
 		JPanel panelRangoFecha= new JPanel();
@@ -68,8 +66,6 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		fechasLbl = new JLabel("Seleccione el intervalo de fechas a buscar:");
 		fechasLbl.setHorizontalAlignment(SwingConstants.LEFT);
 		panelRangoFecha.add(fechasLbl);
-		//fechasLbl.setBounds(10, 38, 245, 14);
-		//add(fechasLbl);
 		
 		add(panelRangoFecha);
 		
@@ -84,14 +80,12 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		
 		
 		botonLiberar = new JButton("Liberar Turno");
-		//botonModificar.setBounds(127, 383, 89, 23);
 		botonLiberar.addActionListener(this);
 		
 		botonTomado= new JButton("Marcar tomado");
 		botonTomado.addActionListener(this);
 		
 		botonBorrar = new JButton("Borrar");
-		//botonBorrar.setBounds(226, 383, 89, 23);
 		botonBorrar.addActionListener(this);
 		
 		botonCancel = new JButton("Cancelar");
@@ -110,24 +104,7 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		int filaSeleccionada= this.getPanelListaTurnos().getTablaTurnos().getSelectedRow();
 		
 		if (e.getSource()== panelBuscaFecha.getBotonBuscar()) {
-			turnoServ= new TurnoService();
-			try {
-				
-				LocalDateTime fechaInicio= FechaUtil.armarFechaYHora(panelBuscaFecha.getDiaChooserInicio().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), 0, 0);
-				LocalDateTime fechaFin= FechaUtil.armarFechaYHora(panelBuscaFecha.getDiaChooserFin().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), 23, 59);
-				
-				listaTurnos= turnoServ.buscarTurnos(fechaInicio, fechaFin);
-				
-				panelListaTurnos.getModelo().setContenido(listaTurnos);
-				panelListaTurnos.getModelo().fireTableDataChanged();
-				datosCargados= true;
-				
-			} catch (ServicioException es) {
-				panelManager.mostrarError(es);
-			} catch( NullPointerException es) {
-				//es.printStackTrace();
-				panelManager.mostrarError("Debe seleccionar una fecha");
-			}
+			llenarTabla();
 		} else if(e.getSource()==botonLiberar) {
 			
 			if (datosCargados & filaSeleccionada >=0) {
@@ -135,7 +112,7 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 					Turno turno= panelListaTurnos.getModelo().getContenido().get(filaSeleccionada);
 					turnoServ.liberarTurno(turno.getNroTurno(), turno.getFechaDesde());
 					panelManager.mostrarOperExitosa();
-					limpiarFormulario();
+					llenarTabla();						//Refresca la tabla luego del cambio
 				} catch (ServicioException es) {
 					panelManager.mostrarError(es);
 				}
@@ -149,7 +126,7 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 					Turno turno= panelListaTurnos.getModelo().getContenido().get(filaSeleccionada);
 					turnoServ.marcarTomado(turno.getNroTurno(), turno.getFechaDesde());
 					panelManager.mostrarOperExitosa();
-					limpiarFormulario();
+					llenarTabla();						//Refresca la tabla luego del cambio
 				} catch (ServicioException es) {
 					panelManager.mostrarError(es);
 				}
@@ -165,7 +142,7 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 						Turno turno= panelListaTurnos.getModelo().getContenido().get(filaSeleccionada);
 						turnoServ.eliminarTurno(turno.getNroTurno());
 						panelManager.mostrarOperExitosa();
-						limpiarFormulario();
+						llenarTabla();
 						
 					} catch (ServicioException es) {
 						panelManager.mostrarError(es);
@@ -181,7 +158,27 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		}
 	}
 	
-	//se cambia public por private 25/05
+	private void llenarTabla() {
+		turnoServ= new TurnoService();
+		try {
+			
+			LocalDateTime fechaInicio= FechaUtil.armarFechaYHora(panelBuscaFecha.getDiaChooserInicio().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), 0, 0);
+			LocalDateTime fechaFin= FechaUtil.armarFechaYHora(panelBuscaFecha.getDiaChooserFin().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), 23, 59);
+			
+			listaTurnos= turnoServ.buscarTurnos(fechaInicio, fechaFin);
+			
+			panelListaTurnos.getModelo().setContenido(listaTurnos);
+			panelListaTurnos.getModelo().fireTableDataChanged();
+			datosCargados= true;
+
+		} catch (ServicioException es) {
+			panelManager.mostrarError(es);
+		} catch( NullPointerException es) {
+			panelManager.mostrarError("Debe seleccionar una fecha");
+		}
+	}
+	
+
 	private void limpiarFormulario() {
 		panelBuscaFecha.getDiaChooserInicio().setDate(null);
 		panelBuscaFecha.getDiaChooserFin().setDate(null);
@@ -192,12 +189,12 @@ public class PanelBMTurno extends JPanel implements ActionListener {
 		
 	}
 
-	//se cambia public por private 25/05
+
 	private PanelListaTurnos getPanelListaTurnos() {
 		return panelListaTurnos;
 	}
 
-	//se cambia public por private 25/05
+	
 	private void setPanelListaTurnos(PanelListaTurnos panelListaTurnos) {
 		this.panelListaTurnos = panelListaTurnos;
 	}

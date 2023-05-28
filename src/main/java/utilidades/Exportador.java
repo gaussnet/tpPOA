@@ -1,11 +1,15 @@
 package utilidades;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 //import java.lang.reflect.Field;
 import java.util.List;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -23,11 +27,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import basico.Paciente;
 import basico.Terapista;
 import basico.Turno;
+import exceptions.ExportadorException;
 import exceptions.ServicioException;
 
 public class Exportador {
 	
-	public static void exportarHistorial(List<Turno> listaTurnos) throws ServicioException {
+	public static void exportarHistorial(List<Turno> listaTurnos) throws ExportadorException {
 		
 		String nombreArchivo= "historicoTurnos_" + listaTurnos.get(0).getAsignadoA() + ".xlsx";
 		
@@ -96,14 +101,38 @@ public class Exportador {
 		}
 		
 		try {
-			OutputStream output= new FileOutputStream(nombreArchivo);
-			libro.write(output);
+			File archivo= guardarComo();
 			
-			libro.close();
-			output.close();
+			if(archivo != null) {
+				OutputStream output= new FileOutputStream(archivo.toString() + "\\" + nombreArchivo);
+				libro.write(output);
+				
+				libro.close();
+				output.close();
+			}
+			
 		} catch (IOException e) {
-			throw new ServicioException("No se pudo generar archivo");
-        }
+			throw new ExportadorException("No se pudo generar archivo");
+        } 
+	}
+	
+	private static File guardarComo(){
+		File archivo= null;
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		
+		FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel", "xlsx");
+		fileChooser.setFileFilter(excelFilter);
+		
+		int seleccion= fileChooser.showSaveDialog(null);
+		
+		if(seleccion ==  JFileChooser.APPROVE_OPTION) {
+			archivo = fileChooser.getSelectedFile();
+		}
+		
+		return archivo;
+
 	}
 
 }

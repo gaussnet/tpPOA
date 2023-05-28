@@ -40,8 +40,6 @@ public class PanelAltaUsuario extends JPanel implements ActionListener {
 	
 	private UsuarioInt usuario;
 	
-	//private int rol;
-	
 
 	/**
 	 * Create the panel.
@@ -52,7 +50,6 @@ public class PanelAltaUsuario extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
 	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(449, 300));
@@ -189,7 +186,7 @@ public class PanelAltaUsuario extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void limpiarFormulario() {
 		dniTxt.setText("");
 		nombreTxt.setText("");
@@ -253,6 +250,5 @@ public class PanelAltaUsuario extends JPanel implements ActionListener {
 	public void setUsuario(UsuarioInt usuario) {
 		this.usuario = usuario;
 	}
-	
 	
 }

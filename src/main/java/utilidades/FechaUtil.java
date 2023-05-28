@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 public class FechaUtil {
 	
-	private static String horas[]= {"8", "9", "10", "11", "12", "14", "15", "16", "17", "18", "19", "20"};
+	private static String horas[]= {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
 	private static String minutos[]= {"00", "30"};
 	
 	public static LocalDateTime stringToLocalDateTime(String fecha) {

@@ -81,7 +81,7 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
 	}
 	
 	public UsuarioInt obtenerUsuario(int unDni) throws DAOException {
-		//UsuarioInt resultado = new Usuario();
+		
 		UsuarioInt resultado;
        
 		conectar();
@@ -158,8 +158,6 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
 				ps.executeUpdate();
 			}
 			
-			
-			
             getConexion().commit();
 		} catch (SQLException e){
 			hacerRollback("Error al modificar usuario");	
@@ -170,9 +168,6 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
 	}
 
 	public int autenticarUsuario(int unDni, String unPassword) throws DAOException {
-		
-		//Usuario resultado=null;
-		//UsuarioInt resultado;			se usa???
 		
 		conectar();
 		
@@ -185,7 +180,6 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
 			ResultSet rs= ps.executeQuery();
 			
 			if (rs.next()) {
-				//resultado= contruirUsuario(rs);
 				return rs.getInt("rol");
 			} else {
 				throw new DAOException("Usuario o contraseña no válida");
@@ -195,11 +189,9 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
 		} finally {
 			cerrarConexion();
 		}
-		//return resultado;
 		
 	}
 	
-	//Se cambia public por private 25/04/2023
 	private UsuarioInt contruirUsuario(ResultSet rs) throws SQLException {
 		
 		UsuarioInt usuario = null;
@@ -215,7 +207,6 @@ public class UsuarioDAOSqLiteImpl extends DAOSqLiteImpl implements UsuarioDAO {
     	usuario.setNombre(rs.getString("nombre"));
     	usuario.setApellido(rs.getString("apellido"));
     	usuario.setPassword(rs.getString("Password"));
-    	//usuario.setRol(rs.getString("rol"));
     	
     	return usuario;
 	}

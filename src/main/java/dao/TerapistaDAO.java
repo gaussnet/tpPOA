@@ -14,7 +14,7 @@ public interface TerapistaDAO {
 	
 	public Terapista obtenerTerapista(int idTerapista) throws DAOException;
 	
-	//public void borrarTerapista(Terapista unTerapista) throws DAOException;
+	public void borrarTerapista(String nombre, String apellido) throws DAOException;
 	
-	//public void modificarTerapista(Terapista unTerapista) throws DAOException;
+	public void modificarTerapista(int idTerapista, String nombre, String apellido) throws DAOException;
 }

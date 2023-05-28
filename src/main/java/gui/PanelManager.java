@@ -1,6 +1,6 @@
 package gui;
 
-import java.awt.Dimension;
+//import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -13,10 +13,15 @@ public class PanelManager {
 	private JFrame frame;
 	private PanelLogin pantallaLogin;
 	private PanelAdmin pantallaAdmin;
+	
 	private PanelAltaUsuario pantallaAltaUsuario;
 	private PanelModificacionUsuario pantallaModificacionUsuario;
 	private PanelBajaUsuario pantallaBajaUsuario;
+	
 	private PanelAltaTerapista pantallaAltaTerapista;
+	private PanelBajaTerapista pantallaBajaTerapista;
+	private PanelModificacionTerapista pantallaModificacionTerapista;
+	
 	private PanelAltaTurno pantallaAltaTurno;
 	private PanelBMTurno pantallaBMTurno;
 	private PanelHistorialTurnos pantallaHistorialTurnos;
@@ -24,22 +29,25 @@ public class PanelManager {
 	private PanelUsuario pantallaUsuario;
 	private PanelSolicitarTurno pantallaSolicitarTurno;
 	private PanelVerTurnos pantallaVerTurnos;
+	private PanelHistorialTurnosPaciente pantallaHistorialTurnosPaciente;
 	
 	public void armarManager() {
 		
 		frame= new JFrame("Centro terapéutico");
-		//frame.setBounds(100,100,500,500);
-		//frame.setSize(new Dimension(300, 300));
 		frame.setLocationRelativeTo(null);
-		//frame.setSize(10000, 10000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		pantallaLogin= new PanelLogin(this);
 		pantallaAdmin= new PanelAdmin(this);
+		
 		pantallaAltaUsuario= new PanelAltaUsuario(this);
 		pantallaModificacionUsuario= new PanelModificacionUsuario(this);
 		pantallaBajaUsuario= new PanelBajaUsuario(this);
+		
 		pantallaAltaTerapista= new PanelAltaTerapista(this);
+		pantallaBajaTerapista= new PanelBajaTerapista(this);
+		pantallaModificacionTerapista= new PanelModificacionTerapista(this);
+		
 		pantallaAltaTurno= new PanelAltaTurno(this);
 		pantallaBMTurno= new PanelBMTurno(this);
 		pantallaHistorialTurnos= new PanelHistorialTurnos(this);
@@ -47,6 +55,7 @@ public class PanelManager {
 		pantallaUsuario= new PanelUsuario(this);
 		pantallaSolicitarTurno= new PanelSolicitarTurno(this);
 		pantallaVerTurnos= new PanelVerTurnos(this);
+		pantallaHistorialTurnosPaciente= new PanelHistorialTurnosPaciente(this);
 		
 		
 	}
@@ -55,7 +64,6 @@ public class PanelManager {
 		frame.setVisible(true);
 		
 	}
-	
 	
 	public void mostrarPanelLogin() {
 		mostrarPanel(pantallaLogin);
@@ -81,6 +89,14 @@ public class PanelManager {
 	public void mostrarPanelAltaTerapista() {
 		mostrarPanel(pantallaAltaTerapista);
 	}
+	
+	public void mostrarPanelBajaTerapista() {
+		mostrarPanel(pantallaBajaTerapista);
+	}
+	
+	public void mostrarPanelModificacionTerapista() {
+		mostrarPanel(pantallaModificacionTerapista);
+	};
 	
 	public void mostrarPanelAltaTurno() {
 		pantallaAltaTurno.llenarComboTerapista();
@@ -110,6 +126,12 @@ public class PanelManager {
 		pantallaVerTurnos.setPaciente(paciente);
 		pantallaVerTurnos.llenarListaTurnos(paciente);
 		mostrarPanel(pantallaVerTurnos);
+	}
+	
+	public void mostrarPanelHistorialTurnosPaciente(Paciente paciente) {
+		pantallaHistorialTurnosPaciente.setPaciente(paciente);
+		pantallaHistorialTurnosPaciente.llenarListaTurnos(paciente);
+		mostrarPanel(pantallaHistorialTurnosPaciente);
 	}
 	
 	public void mostrarSalir() {

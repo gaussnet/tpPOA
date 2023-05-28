@@ -26,8 +26,4 @@ public class Paciente extends Usuario implements UsuarioInt{
 		return getNombre() + " " + getApellido();
 	}
 	
-	
-	
-	
-
 }

@@ -49,7 +49,6 @@ public class PanelAltaTurno extends JPanel implements ActionListener {
 
 	}
 	
-	//se cambia public por private 25/05
 	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(330, 300));
@@ -114,7 +113,6 @@ public class PanelAltaTurno extends JPanel implements ActionListener {
 		fechaLbl.setBounds(10, 89, 52, 14);
 		add(fechaLbl);
 		
-		
 	}
 	
 	
@@ -144,9 +142,7 @@ public class PanelAltaTurno extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
 	private void limpiarFormulario() {
-		//terapistaComboBox.setSelectedIndex(0);
 		terapistaComboBox.removeAllItems();
 		diaChooser.setDate(null);
 		horaInicioComboBox.setSelectedIndex(0);

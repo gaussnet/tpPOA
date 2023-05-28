@@ -45,7 +45,6 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		armarPanel();
 	}
 	
-	//se cambia public por private 25/05
 	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(449, 300));
@@ -154,7 +153,7 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 				}
 				
 			} else {
-				JOptionPane.showMessageDialog(this, "No hay ning�n cliente cargado", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "No hay ningún cliente cargado", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			
 		} else if (e.getSource()== botonCancel) {
@@ -167,7 +166,7 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void limpiarFormulario() {
 		dniTxt.setText("");
 		nombreTxt.setText("");
@@ -181,7 +180,7 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void llenarFormulario(UsuarioInt usu) {
 		dniTxt.setText(String.valueOf(usu.getDni()));
 		nombreTxt.setText(usu.getNombre());
@@ -202,7 +201,7 @@ public class PanelBajaUsuario extends JPanel implements ActionListener{
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void buscar() {
 		try {
 			this.setUsuario(this.getUsuarioServ().buscarUsuario(Integer.parseInt(dniTxt.getText())));

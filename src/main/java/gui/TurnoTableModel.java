@@ -7,7 +7,7 @@ import utilidades.FechaUtil;
 import basico.Paciente;
 import basico.Terapista;
 
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 

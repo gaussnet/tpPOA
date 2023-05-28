@@ -2,26 +2,31 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import basico.Paciente;
 import basico.Turno;
+import exceptions.ExportadorException;
 import exceptions.ServicioException;
 import service.TurnoService;
+import utilidades.Exportador;
 
-public class PanelVerTurnos extends JPanel implements ActionListener {
+public class PanelHistorialTurnosPaciente extends JPanel implements ActionListener {
 
-	private JButton botonLiberarTurno;
-	private JButton botonCancel;
-	private PanelListaTurnos panelListaTurnos;
-	
 	private PanelManager panelManager;
+	
+	private JButton botonExportar;
+	private JButton botonCancel;
+	
+	private List<Turno> listaTurnos;
+	
+	private PanelListaTurnos panelListaTurnos;
 	
 	private Paciente paciente;
 	
@@ -30,58 +35,51 @@ public class PanelVerTurnos extends JPanel implements ActionListener {
 	/**
 	 * Create the panel.
 	 */
-	public PanelVerTurnos(PanelManager manager) {
+	public PanelHistorialTurnosPaciente(PanelManager manager) {
 		panelManager= manager;
 		armarPanel();
-
+		
 	}
 	
 	private void armarPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JLabel lblOperacion = new JLabel("Mis turnos");
-		lblOperacion.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblOperacion);
+		JLabel operacionLbl = new JLabel("Historial de turnos");
+		operacionLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		add(operacionLbl);
 		
 		panelListaTurnos= new PanelListaTurnos();
-		add(panelListaTurnos);
+		this.add(panelListaTurnos);
 		
 		JPanel panelBotones= new JPanel();
-		botonLiberarTurno= new JButton("Cancelar turno");
-		botonLiberarTurno.addActionListener(this);
 		
+		botonExportar= new JButton("Exportar");
+		botonExportar.addActionListener(this);
 		botonCancel= new JButton("Cancelar");
 		botonCancel.addActionListener(this);
 		
-		panelBotones.add(botonLiberarTurno);
+		panelBotones.add(botonExportar);
 		panelBotones.add(botonCancel);
 		
 		add(panelBotones);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		int filaSeleccionada= panelListaTurnos.getTablaTurnos().getSelectedRow();
-		
-		if (e.getSource()==botonLiberarTurno) {
-			
-			if (filaSeleccionada >=0) {
-				try {
-					Turno turno= panelListaTurnos.getModelo().getContenido().get(filaSeleccionada);
-					turnoServ.liberarTurnoPaciente(turno.getNroTurno(), turno.getFechaDesde());
-					panelManager.mostrarOperExitosa();
-					llenarListaTurnos(paciente);
-				} catch (ServicioException es) {
-					panelManager.mostrarError(es);
+		if(e.getSource()==botonExportar) {
+			try {
+				if(listaTurnos.size() > 0) {
+					Exportador.exportarHistorial(listaTurnos);
+				} else {
+					panelManager.mostrarError("No hay turnos cargados");
 				}
-			} else {
-				JOptionPane.showMessageDialog(this, "No hay ningún turno seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			} catch (ExportadorException es) {
+				panelManager.mostrarError(es);
 			}
-			
-		} else if (e.getSource()==botonCancel) {
+		} else if(e.getSource()==botonCancel) {
 			limpiarFormulario();
 			panelManager.mostrarPanelUsuario(paciente);
 		}
-
 	}
 	
 	private void limpiarFormulario() {
@@ -93,7 +91,9 @@ public class PanelVerTurnos extends JPanel implements ActionListener {
 		turnoServ= new TurnoService();
 		
 		try {
-			panelListaTurnos.getModelo().setContenido(turnoServ.obtenerTurnosPaciente(paciente));
+			listaTurnos= turnoServ.obtenerTurnosHistoricoTomadoPaciente(paciente);
+			
+			panelListaTurnos.getModelo().setContenido(listaTurnos);
 			panelListaTurnos.getModelo().fireTableDataChanged();
 		} catch (ServicioException es) {
 			panelManager.mostrarError(es);

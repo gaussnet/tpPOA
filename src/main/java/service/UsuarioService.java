@@ -1,10 +1,15 @@
 package service;
 
+import java.util.List;
+
 import basico.Administrador;
 import basico.Paciente;
-import basico.Usuario;
+import basico.Turno;
+//import basico.Usuario;
 import basico.UsuarioInt;
 import dao.UsuarioDAO;
+import dao.TurnoDAO;
+import daoSqLiteImpl.TurnoDAOSqLiteImpl;
 import daoSqLiteImpl.UsuarioDAOSqLiteImpl;
 import exceptions.DAOException;
 import exceptions.ServicioException;
@@ -41,8 +46,18 @@ public class UsuarioService {
 	
 	public void eliminarUsuario(int dni) throws ServicioException {
         UsuarioDAO dao = new UsuarioDAOSqLiteImpl();
+        TurnoDAO turnoDao= new TurnoDAOSqLiteImpl();
+        List<Turno> listaTurnos;
+        
         try {
+        	listaTurnos= turnoDao.obtenerTurnosPaciente(dni);
+        	if(listaTurnos.size() > 0) {
+        		Exception ex= new Exception("El usuario tiene turnos asignados");
+        		throw new ServicioException(ex);
+        	}
+        	
         	dao.borrarUsuario(dni);
+        	
         } catch (DAOException e) {
         	throw new ServicioException(e);
         }
@@ -62,7 +77,6 @@ public class UsuarioService {
     }
 	
 	public int autenticarUsuario(int dni, String password) throws ServicioException {
-    	//Usuario usu;
 		int rol;
 		
     	UsuarioDAO dao=  new UsuarioDAOSqLiteImpl();
@@ -75,19 +89,5 @@ public class UsuarioService {
     	}
     	return rol;
     }
-	
-	/*
-	public Paciente obtenerPaciente(int dni, String password) throws ServicioException {
-		UsuarioDAO dao=  new UsuarioDAOSqLiteImpl();
-		Paciente paciente;
-		try {
-			paciente= dao.obtenerPaciente(dni, password);
-		} catch (DAOException e) {
-    		throw new ServicioException(e);
-    	}
-		
-		return paciente;
-	}
-	*/
 
 }

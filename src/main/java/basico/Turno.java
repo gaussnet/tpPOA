@@ -25,20 +25,6 @@ public class Turno {
 		this.terapista = terapista;
 		this.tomado = tomado;
 	}
-	
-	/*
-	public List<Object> obtenerValores() {
-		List<Object> valores= new ArrayList<>();
-		valores.add(nroTurno);
-		valores.add(fechaDesde);
-		valores.add(fechaHasta);
-		valores.add(asignadoA);
-		valores.add(terapista);
-		valores.add(tomado);
-		
-		return valores;
-	}
-	*/
 
 	public int getNroTurno() {
 		return nroTurno;

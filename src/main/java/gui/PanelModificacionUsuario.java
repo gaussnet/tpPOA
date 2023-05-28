@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 
-import basico.Usuario;
+//import basico.Usuario;
 import basico.Administrador;
 import basico.Paciente;
 import basico.UsuarioInt;
@@ -50,7 +50,7 @@ public class PanelModificacionUsuario extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(449, 300));
@@ -173,7 +173,7 @@ public class PanelModificacionUsuario extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void limpiarFormulario() {
 		dniTxt.setText("");
 		nombreTxt.setText("");
@@ -187,7 +187,7 @@ public class PanelModificacionUsuario extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void llenarFormulario(UsuarioInt usu) {
 		dniTxt.setText(String.valueOf(usu.getDni()));
 		nombreTxt.setText(usu.getNombre());
@@ -208,7 +208,7 @@ public class PanelModificacionUsuario extends JPanel implements ActionListener {
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void buscar() {
 		try {
 			this.setUsuario(this.getUsuarioServ().buscarUsuario(Integer.parseInt(dniTxt.getText())));

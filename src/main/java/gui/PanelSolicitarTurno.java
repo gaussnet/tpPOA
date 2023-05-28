@@ -11,8 +11,8 @@ import exceptions.ServicioException;
 import service.TerapistaService;
 import service.TurnoService;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+//import java.awt.Dimension;
+//import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -30,7 +30,6 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 	private JComboBox terapistaComboBox;
 	private JButton botonBuscar;
 	
-	private JPanel panelBotones;
 	private JButton botonSolicitar;
 	private JButton botonCancel;
 	
@@ -52,24 +51,23 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 	 */
 	public PanelSolicitarTurno(PanelManager manager) {
 		panelManager= manager;
-		//setLayout(null);
 		armarPanel();
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void armarPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JLabel lblOperacion = new JLabel("Solicitud nuevo turno");
 		lblOperacion.setHorizontalAlignment(SwingConstants.CENTER);
-		//lblOperacion.setBounds(10, 11, 430, 14);
+		
 		add(lblOperacion);
 		
 		panelBuscaTerapista= new JPanel();
 		
 		JLabel lblTerapista = new JLabel("Terapista:");
-		//lblTerapista.setBounds(10, 11, 430, 14);
+		
 		panelBuscaTerapista.add(lblTerapista);
 		
 		terapistaComboBox = new JComboBox();
@@ -88,9 +86,6 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 		botonBuscar.addActionListener(this);
 		panelBuscaTerapista.add(botonBuscar);
 		
-		
-		
-		//panelBuscaTerapista= new PanelBuscaTerapista();
 		add(panelBuscaTerapista);
 		
 		panelListaTurnos= new PanelListaTurnos();
@@ -113,7 +108,6 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		int filaSeleccionada= panelListaTurnos.getTablaTurnos().getSelectedRow();
 		if (e.getSource()==botonSolicitar) {
-			//System.out.println("Boton solicitar");
 			if (datosCargados & filaSeleccionada >=0) {
 				turnoServ= new TurnoService();
 				
@@ -121,8 +115,7 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 					Turno turno= panelListaTurnos.getModelo().getContenido().get(filaSeleccionada);
 					turnoServ.asignarTurno(turno.getNroTurno(), paciente);
 					panelManager.mostrarOperExitosa();
-					limpiarFormulario();
-					llenarComboTerapista();
+					llenarTabla();
 				} catch (ServicioException es) {
 					panelManager.mostrarError(es);
 				}
@@ -131,18 +124,7 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 			}
 			
 		} else if(e.getSource()==botonBuscar) {
-			
-			turnoServ= new TurnoService();
-			
-			try {
-				listaTurnos= turnoServ.buscarTurnoTerapista(seleccion[0], seleccion[1]);
-				
-				panelListaTurnos.getModelo().setContenido(listaTurnos);
-				panelListaTurnos.getModelo().fireTableDataChanged();
-				datosCargados= true;
-			} catch (ServicioException es) {
-				panelManager.mostrarError(es);
-			}
+			llenarTabla();
 		} else if (e.getSource()==botonCancel) {
 			limpiarFormulario();
 			datosCargados= false;
@@ -150,16 +132,26 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 		}
 	}
 	
-	//se cambia public por private 25/05
+	private void llenarTabla() {
+		turnoServ= new TurnoService();
+		
+		try {
+			listaTurnos= turnoServ.buscarTurnoTerapista(seleccion[0], seleccion[1]);
+			
+			panelListaTurnos.getModelo().setContenido(listaTurnos);
+			panelListaTurnos.getModelo().fireTableDataChanged();
+			datosCargados= true;
+		} catch (ServicioException es) {
+			panelManager.mostrarError(es);
+		}
+	}
+	
+
 	private void limpiarFormulario() {
-		//terapistaComboBox.setSelectedIndex(0);
 		terapistaComboBox.removeAllItems();
 		panelListaTurnos.getModelo().getContenido().clear();
 		panelListaTurnos.getModelo().fireTableDataChanged();
 		
-		//diaChooser.setDate(null);
-		//horaInicioComboBox.setSelectedIndex(0);
-		//minutoInicioComboBox.setSelectedIndex(0);
 	}
 	
 	public void llenarComboTerapista() {
@@ -184,6 +176,5 @@ public class PanelSolicitarTurno extends JPanel implements ActionListener {
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
 	}
-	
 	
 }

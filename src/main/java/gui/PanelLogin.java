@@ -28,7 +28,7 @@ public class PanelLogin extends JPanel implements ActionListener {
 	private PanelManager panelManager;
 	
 	private UsuarioService usuarioServ;
-	//private Usuario usuarioLogin;
+	
 	private Paciente pacienteLogin;
 	int rol;
 
@@ -41,11 +41,10 @@ public class PanelLogin extends JPanel implements ActionListener {
 
 	}
 	
-	//se cambia public por private 25/05
+
 	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(449, 300));
-		//this.setSize(new Dimension(300, 300));
 		
 		usuarioLbl = new JLabel("Usuario:");
 		usuarioLbl.setBounds(128, 92, 68, 14);
@@ -108,7 +107,6 @@ public class PanelLogin extends JPanel implements ActionListener {
 		}
 	}
 
-	//se cambia public por private 25/05
 	private void limpiarFormulario() {
 		this.getUsuarioTxt().setText("");
 		this.getPasswordTxt().setText("");
@@ -129,6 +127,5 @@ public class PanelLogin extends JPanel implements ActionListener {
 	public void setPasswordTxt(JPasswordField passwordTxt) {
 		this.passwordTxt = passwordTxt;
 	}
-	
 	
 }

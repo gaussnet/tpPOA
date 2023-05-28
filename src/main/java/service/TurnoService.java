@@ -4,24 +4,24 @@ import exceptions.DAOException;
 import exceptions.ServicioException;
 import utilidades.FechaUtil;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+//import java.io.OutputStream;
 //import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
+//import java.time.temporal.TemporalAdjusters;
 //import java.time.ZoneId;
 //import java.util.Calendar;
 //import java.util.Date;
 //import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+//import org.apache.poi.ss.usermodel.Sheet;
+//import org.apache.poi.ss.usermodel.Workbook;
+//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import basico.Paciente;
-import basico.Terapista;
+//import basico.Terapista;
 import basico.Turno;
 import dao.TurnoDAO;
 import daoSqLiteImpl.TurnoDAOSqLiteImpl;
@@ -30,6 +30,7 @@ public class TurnoService {
 	
 	public void crearTurno(LocalDateTime fechaInicio, String nombreTerapista, String apellidoTerapista) throws ServicioException {
 		TurnoDAO dao= new TurnoDAOSqLiteImpl();
+		List<Turno> listaTurnos;
 		
 		try {
 			
@@ -40,16 +41,22 @@ public class TurnoService {
 				throw new ServicioException(ex);
 			}
 			
-			if(FechaUtil.esDiaHabil(fechaInicio)) {
-				String fechaDesdeString= FechaUtil.localDateTimeToString(fechaInicio);
-				String fechaHastaString= FechaUtil.localDateTimeToString(fechaInicio.plusMinutes(30));
-				
-				dao.crearTurno(fechaDesdeString, fechaHastaString, nombreTerapista, apellidoTerapista);
-			} else {
+			if(!FechaUtil.esDiaHabil(fechaInicio)) {
 				Exception ex= new Exception("Es un día no habil");
 				throw new ServicioException(ex);
 			}
-			 
+			
+			String fechaDesdeString= FechaUtil.localDateTimeToString(fechaInicio);
+			String fechaHastaString= FechaUtil.localDateTimeToString(fechaInicio.plusMinutes(30));
+			
+			listaTurnos= dao.obtenerTurnosTerapista(nombreTerapista, apellidoTerapista, fechaDesdeString);
+			
+			if(listaTurnos.size() > 0) {
+				Exception ex= new Exception("El turno ya existe");
+				throw new ServicioException(ex);
+			}
+			
+			dao.crearTurno(fechaDesdeString, fechaHastaString, nombreTerapista, apellidoTerapista);
 			
 		} catch (DAOException e) {
             throw new ServicioException(e);
@@ -81,7 +88,6 @@ public class TurnoService {
 			String fechaInicioString= FechaUtil.localDateTimeToString(LocalDateTime.now());
 			String fechaFinString= FechaUtil.localDateTimeToString(FechaUtil.obtenerUltimoDiaSemana());
 			
-			//System.out.println(fechaInicioString + " " + fechaFinString);
 			listaTurnos= dao.obtenerTurnosTerapista(nombreTerapista, apellidoTerapista, fechaInicioString, fechaFinString);
 			
 		} catch (DAOException e) {
@@ -93,9 +99,17 @@ public class TurnoService {
 	
 	public void eliminarTurno(int nroTurno) throws ServicioException {
 		TurnoDAO dao= new TurnoDAOSqLiteImpl();
+		Turno turno= null;
 		
 		try {
-			dao.borrarTurno(nroTurno);
+			turno= dao.obtenerTurno(nroTurno);
+			if(turno.getTomado() == false) {
+				dao.borrarTurno(nroTurno);
+			} else {
+				Exception ex= new Exception("El turno ya fue tomado");
+				throw new ServicioException(ex);
+			}
+			
 		} catch (DAOException e) {
             throw new ServicioException(e);
         }
@@ -151,7 +165,6 @@ public class TurnoService {
 				throw new ServicioException(ex);
 			}
 			
-			//dao.asignarTurno(nroTurno, paciente.getNombre(), paciente.getApellido());
 			dao.asignarTurno(nroTurno, paciente.getDni());
 		} catch (DAOException e) {
             throw new ServicioException(e);
@@ -210,21 +223,4 @@ public class TurnoService {
 		return listaTurnos;
 	}
 	
-	/*
-	public void exportarHistorial(List<Turno> listaTurnos) throws ServicioException {
-		Workbook libro= new XSSFWorkbook();
-		Sheet hoja= libro.createSheet("Historial turnos");
-		
-		try {
-			OutputStream output= new FileOutputStream("historicoTurnos.xlsx");
-			libro.write(output);
-			
-			libro.close();
-			output.close();
-		} catch (IOException e) {
-			//Exception e= new Exception("No se pudo exportar el historial");
-            throw new ServicioException(e);
-        }
-	}
-	*/
 }

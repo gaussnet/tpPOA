@@ -26,7 +26,6 @@ public class PanelAdmin extends JPanel {
 	private JButton botonCrearTurno;
 	private JButton botonModificarTurno;
 	private JButton botonHistorialTurnos;
-	//private JButton botonBorrarTurno;
 	
 	private JButton botonCrearTerapista;
 	private JButton botonModificarTerapista;
@@ -37,7 +36,6 @@ public class PanelAdmin extends JPanel {
 		armarPanel();
 	}
 	
-	//se cambia public por private 25/05
 	private void armarPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		JTabbedPane panelFichas= new JTabbedPane();
@@ -46,7 +44,6 @@ public class PanelAdmin extends JPanel {
 		botonCrearUsuario= new JButton("Crear usuario");
 		botonModificarUsuario= new JButton("Modificar usuario");
 		botonBorrarUsuario= new JButton("Borrar ususario");
-		//botonListarClientes= new JButton("Listar clientes");
 		
 		panelOpcionesUsuarios.add(botonCrearUsuario);
 		panelOpcionesUsuarios.add(botonModificarUsuario);
@@ -56,12 +53,10 @@ public class PanelAdmin extends JPanel {
 		botonCrearTurno= new JButton("Crear turno");
 		botonModificarTurno= new JButton("Gestionar turnos");
 		botonHistorialTurnos= new JButton("Historial turnos");
-		//botonBorrarTurno= new JButton("Borrar turno");
 		
 		panelOpcionesTurnos.add(botonCrearTurno);
 		panelOpcionesTurnos.add(botonModificarTurno);
 		panelOpcionesTurnos.add(botonHistorialTurnos);
-		//panelOpcionesTurnos.add(botonBorrarTurno);
 		
 		panelOpcionesTerapistas= new JPanel();
 		botonCrearTerapista= new JButton("Crear terapista");
@@ -105,6 +100,18 @@ public class PanelAdmin extends JPanel {
 			}
 		});
 		
+		botonBorrarTerapista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelBajaTerapista();
+			}
+		});
+		
+		botonModificarTerapista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelModificacionTerapista();
+			}
+		});
+		
 		botonCrearTurno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelManager.mostrarPanelAltaTurno();
@@ -122,8 +129,6 @@ public class PanelAdmin extends JPanel {
 				panelManager.mostrarPanelHistorialTurnos();
 			}
 		});
-		
-		//TODO Crear los actionListener restantes
 		
 		panelSalir.add(botonSalir);
 		

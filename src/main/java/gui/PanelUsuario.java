@@ -28,7 +28,7 @@ public class PanelUsuario extends JPanel {
 		
 	}
 	
-	//se cambia public por private 25/05
+
 	private void armarPanel() {
 		setLayout(null);
 		this.setPreferredSize(new Dimension(323, 256));
@@ -63,6 +63,12 @@ public class PanelUsuario extends JPanel {
 		btnHistorial.setBounds(103, 119, 120, 23);
 		add(btnHistorial);
 		
+		btnHistorial.addActionListener(new ActionListener( ) {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.mostrarPanelHistorialTurnosPaciente(paciente);
+			}
+		});
+		
 		JButton btnSalir = new JButton("Cerrar sesión");
 		btnSalir.setBounds(103, 197, 120, 23);
 		add(btnSalir);
@@ -82,6 +88,5 @@ public class PanelUsuario extends JPanel {
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
 	}
-	
 	
 }

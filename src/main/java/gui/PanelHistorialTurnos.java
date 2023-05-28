@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import basico.Turno;
+import exceptions.ExportadorException;
 import exceptions.ServicioException;
 import service.TurnoService;
 import service.UsuarioService;
@@ -85,7 +86,6 @@ public class PanelHistorialTurnos extends JPanel implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		//int filaSeleccionada= panelListaTurnos.getTablaTurnos().getSelectedRow();
 		
 		if (e.getSource()== botonBuscar) {
 			if(pacienteTxt.getText().isEmpty()) {
@@ -103,6 +103,8 @@ public class PanelHistorialTurnos extends JPanel implements ActionListener {
 					datosCargados= true;
 				} catch (ServicioException es) {
 					panelManager.mostrarError(es);
+				} catch (java.lang.NumberFormatException es) {
+					panelManager.mostrarError("DNI: Tiene que ingresar un número");
 				}
 			}
 			
@@ -110,8 +112,7 @@ public class PanelHistorialTurnos extends JPanel implements ActionListener {
 			if (datosCargados) {
 				try {
 					Exportador.exportarHistorial(listaTurnos);
-					panelManager.mostrarOperExitosa();
-				} catch (ServicioException es) {
+				} catch (ExportadorException es) {
 					panelManager.mostrarError(es);
 				}
 			} else {
@@ -140,6 +141,4 @@ public class PanelHistorialTurnos extends JPanel implements ActionListener {
 		this.pacienteTxt = pacienteTxt;
 	}
 	
-	
-
 }

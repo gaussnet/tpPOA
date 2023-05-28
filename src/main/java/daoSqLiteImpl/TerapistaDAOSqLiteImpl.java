@@ -110,6 +110,43 @@ public class TerapistaDAOSqLiteImpl extends DAOSqLiteImpl implements TerapistaDA
         return resultado;
 	}
 	
+	public void borrarTerapista(String nombre, String apellido) throws DAOException {
+		conectar();
+		
+		try {
+			PreparedStatement ps= getConexion().prepareStatement("DELETE FROM terapista where nombre= ? and apellido= ?");
+			ps.setString(1, nombre);
+			ps.setString(2, apellido);
+			
+			ps.executeUpdate();
+			
+			getConexion().commit();
+		} catch (SQLException e){
+			hacerRollback("Error al borrar terapista");
+		} finally {
+			cerrarConexion();
+		}
+	}
+	
+	public void modificarTerapista(int idTerapista, String nombre, String apellido) throws DAOException {
+		conectar();
+		
+		try {
+			PreparedStatement ps= getConexion().prepareStatement("UPDATE terapista SET nombre= ?, apellido= ? where id_terapista= ?");
+			ps.setString(1, nombre);
+			ps.setString(2, apellido);
+			ps.setInt(3, idTerapista);
+			
+			ps.executeUpdate();
+			
+			getConexion().commit();
+		} catch (SQLException e){
+			hacerRollback("Error al modificar terapista");
+		} finally {
+			cerrarConexion();
+		}
+	}
+	
 	public Terapista construirTerapista(ResultSet rs) throws SQLException {
 		Terapista terapista= new Terapista();
 		

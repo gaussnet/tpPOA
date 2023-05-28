@@ -1,6 +1,5 @@
 package basico;
 
-//Se agregó abstract 25/05/2023
 public abstract class Usuario {
 
 	private int dni;
@@ -51,6 +50,5 @@ public abstract class Usuario {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
+		
 }

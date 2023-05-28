@@ -17,8 +17,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 
 	public void crearTurno(String fechaDesde, String fechaHasta, String nombreTerapista, String apellidoTerapista) throws DAOException{
 		
-		//conectar();
-		
 		try {
 			
 			TerapistaDAOSqLiteImpl terapistaDAOSqLiteImpl = new TerapistaDAOSqLiteImpl();
@@ -37,7 +35,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			
             getConexion().commit();
 		} catch(SQLException e) {
-			//e.printStackTrace();
 			hacerRollback("Error al crear turno");
 		} finally {
             cerrarConexion();
@@ -47,7 +44,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 	public List<Turno> obtenerTurnos(String fechaDesde, String fechaHasta) throws DAOException {
 		List<Turno> lista= new ArrayList<>();
 		Turno turno;
-		//String sql = "SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ?";
 		
 		conectar();
 		
@@ -55,12 +51,9 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			//A la fecha que recibo le saco la hora
 			String fechaDesdeTruncada= fechaDesde.split("T")[0];
 			String fechaHastaTruncada= fechaHasta.split("T")[0];
-			//System.out.println(fechaDesdeTruncada + " " + fechaHastaTruncada);
 			
-			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ?");
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ? order by fechaDesde");
 			
-			//ps.setString(1, fechaDesde);
-			//ps.setString(2, fechaHasta);
 			ps.setString(1, fechaDesdeTruncada);
 			ps.setString(2, fechaHastaTruncada);
 			
@@ -81,11 +74,34 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 		
 	}
 	
+	public Turno obtenerTurno(int nroTurno) throws DAOException {
+		Turno turno= null;
+		
+		conectar();
+		
+		try {
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where id_turno= ?");
+			
+			ps.setInt(1, nroTurno);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			if (rs.next()) {
+				turno= construirTurno(rs);
+			}
+			
+		} catch (SQLException e) {
+        	throw new DAOException("Error al listar turnos");
+        } finally {
+            cerrarConexion();
+        }
+		
+		return turno;
+	}
+	
 	public List<Turno> obtenerTurnosTerapista(String nombreTerapista, String apellidoTerapista, String fechaDesde, String fechaHasta) throws DAOException {
 		List<Turno> lista= new ArrayList<>();
 		Turno turno;
-		
-		//conectar();
 		
 		try {
 			TerapistaDAOSqLiteImpl terapistaDAOSqLiteImpl = new TerapistaDAOSqLiteImpl();
@@ -96,11 +112,76 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			String fechaDesdeTruncada= fechaDesde.split("T")[0];
 			String fechaHastaTruncada= fechaHasta.split("T")[0];
 			
-			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ? and terapista = ? and paciente is null");
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ? and terapista = ? and paciente is null order by fechaDesde");
 			
 			ps.setString(1, fechaDesdeTruncada);
 			ps.setString(2, fechaHastaTruncada);
 			ps.setInt(3, idTerapista);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			while (rs.next()) {
+				turno= construirTurno(rs);
+				lista.add(turno);
+			}
+			
+		}  catch (SQLException e) {
+        	throw new DAOException("Error al listar turnos");
+        } finally {
+            cerrarConexion();
+        }
+		
+		return lista;
+	}
+	
+	public List<Turno> obtenerTurnosTerapista(String nombreTerapista, String apellidoTerapista, String fechaDesde) throws DAOException {
+		List<Turno> lista= new ArrayList<>();
+		Turno turno;
+		
+		try {
+			TerapistaDAOSqLiteImpl terapistaDAOSqLiteImpl = new TerapistaDAOSqLiteImpl();
+			int idTerapista= terapistaDAOSqLiteImpl.obtenerIDTerapista(nombreTerapista, apellidoTerapista);
+			
+			conectar();
+			
+			String fechaDesdeTruncada= fechaDesde.split("T")[0];
+			String horaDesdeTruncada= fechaDesde.split("T")[1];
+			
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) = ? and strftime('%H:%M:%S', fechaDesde) = ? and terapista = ?");
+			
+			ps.setString(1, fechaDesdeTruncada);
+			ps.setString(2, horaDesdeTruncada);
+			ps.setInt(3, idTerapista);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			while (rs.next()) {
+				turno= construirTurno(rs);
+				lista.add(turno);
+			}
+			
+		}  catch (SQLException e) {
+        	throw new DAOException("Error al listar turnos");
+        } finally {
+            cerrarConexion();
+        }
+		
+		return lista;
+	}
+	
+	public List<Turno> obtenerTurnosTerapista(String nombreTerapista, String apellidoTerapista) throws DAOException {
+		List<Turno> lista= new ArrayList<>();
+		Turno turno;
+		
+		try {
+			TerapistaDAOSqLiteImpl terapistaDAOSqLiteImpl = new TerapistaDAOSqLiteImpl();
+			int idTerapista= terapistaDAOSqLiteImpl.obtenerIDTerapista(nombreTerapista, apellidoTerapista);
+			
+			conectar();
+			
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where terapista = ?");
+			
+			ps.setInt(1, idTerapista);
 			
 			ResultSet rs= ps.executeQuery();
 			
@@ -126,9 +207,37 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			conectar();
 			String fechaDesdeTruncada= fechaDesde.split("T")[0];
 			
-			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and paciente = ?");
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and paciente = ? order by fechaDesde");
 			ps.setString(1, fechaDesdeTruncada);
 			ps.setInt(2, dniPaciente);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			while (rs.next()) {
+				turno= construirTurno(rs);
+				lista.add(turno);
+			}
+			
+		} catch (SQLException e) {
+        	throw new DAOException("Error al listar turnos");
+        } finally {
+            cerrarConexion();
+        }
+		
+		return lista;
+		
+	}
+	
+	public List<Turno> obtenerTurnosPaciente(int dniPaciente) throws DAOException {
+		List<Turno> lista= new ArrayList<>();
+		Turno turno;
+		
+		try {
+			conectar();
+			
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where paciente = ?");
+			
+			ps.setInt(1, dniPaciente);
 			
 			ResultSet rs= ps.executeQuery();
 			
@@ -158,7 +267,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			
 			getConexion().commit();
 		} catch (SQLException e){
-			//e.printStackTrace();
 			hacerRollback("Error al borrar turno");
 		} finally {
 			cerrarConexion();
@@ -166,7 +274,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 	}
 	
 	public void liberarTurno(int nroTurno) throws DAOException {
-		//Turno turno;
 		
 		conectar();
 		
@@ -177,12 +284,11 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			ResultSet rs= ps.executeQuery();
 			
 			if (rs.next()) {
-				//turno= construirTurno(rs);
 				if(rs.getInt("paciente") == 0) {
 					throw new DAOException("El turno no está asignado");
 				} else {
 					PreparedStatement psUpdate= getConexion().prepareStatement("UPDATE turno SET paciente= ? where id_turno= ?");
-					//psUpdate.setInt(1, 0);
+				
 					psUpdate.setNull(1, 0);
 					psUpdate.setInt(2,  nroTurno);
 					
@@ -195,7 +301,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
             }
 			
 		} catch (SQLException e){
-			//e.printStackTrace();
 			hacerRollback("Error al liberar turno");
 		} finally {
 			cerrarConexion();
@@ -233,7 +338,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
             }
 			
 		} catch (SQLException e){
-			//e.printStackTrace();
 			hacerRollback("Error al marcar turno");
 		} finally {
 			cerrarConexion();
@@ -243,14 +347,11 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 	public void asignarTurno(int nroTurno, int dniPaciente) throws DAOException {
 		
 		try {
-			//UsuarioDAOSqLiteImpl usuarioDAOSqLiteImpl= new UsuarioDAOSqLiteImpl();
-			
-			//int dniPaciente= usuarioDAOSqLiteImpl.obtenerDNIPaciente(nombrePaciente, apellidoPaciente);
 			
 			conectar();
 			
 			PreparedStatement psUpdate= getConexion().prepareStatement("UPDATE turno SET paciente= ? where id_turno= ?");
-			//psUpdate.setInt(1, 0);
+			
 			psUpdate.setInt(1, dniPaciente);
 			psUpdate.setInt(2,  nroTurno);
 			
@@ -259,7 +360,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			getConexion().commit();
 			
 		} catch(SQLException e) {
-			//e.printStackTrace();
 			hacerRollback("Error al crear turno");
 		} finally {
             cerrarConexion();
@@ -275,7 +375,7 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			String fechaDesdeTruncada= fechaDesde.split("T")[0];
 			String fechaHastaTruncada= fechaHasta.split("T")[0];
 			
-			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ? and paciente = ? and tomado = 1");
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM turno where date(fechaDesde) >= ? and date(fechaHasta) <= ? and paciente = ? and tomado = 1 order by fechaDesde");
 			ps.setString(1, fechaDesdeTruncada);
 			ps.setString(2, fechaHastaTruncada);
 			ps.setInt(3, dniPaciente);
@@ -297,7 +397,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 		
 	}
 	
-	//Se cambio public por private 25/05/2023
 	private Turno construirTurno(ResultSet rs) throws SQLException, DAOException {
 		Turno turno= new Turno();
 		Paciente paciente= null;
@@ -313,7 +412,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 			turno.setTomado(true);
 		}
 		
-		
 		try {
 			if(rs.getInt("paciente") == 0) {
 				turno.setAsignadoA(null);
@@ -324,7 +422,6 @@ public class TurnoDAOSqLiteImpl  extends DAOSqLiteImpl implements TurnoDAO{
 				ResultSet rsPaciente= ps.executeQuery();
 
 	            if (rsPaciente.next()) {	
-	            	//paciente= contruirUsuario(rs);
 	            	paciente= new Paciente();
 	            	paciente.setDni(rsPaciente.getInt("dni"));
 	            	paciente.setNombre(rsPaciente.getString("nombre"));
