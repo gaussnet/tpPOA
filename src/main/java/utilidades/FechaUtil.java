@@ -10,9 +10,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+
 public class FechaUtil {
 	
-	private static String horas[]= {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
+	private static String horasManana[]= {"7", "8", "9", "10", "11", "12"};
+	private static String horasTarde[]= {"13", "14", "15", "16", "17", "18", "19"};
+	private static String horasNoche[]= {"20", "21", "22"};
+	
+	
 	private static String minutos[]= {"00", "30"};
 	
 	public static LocalDateTime stringToLocalDateTime(String fecha) {
@@ -72,13 +77,30 @@ public class FechaUtil {
 		 
 	}
 
-	public static String[] getHoras() {
-		return horas;
+	public static String[] getHorasManana() {
+		return horasManana;
 	}
 
-	public void setHoras(String[] horas) {
-		this.horas = horas;
+	public static void setHorasManana(String[] horasManana) {
+		FechaUtil.horasManana = horasManana;
 	}
+
+	public static String[] getHorasTarde() {
+		return horasTarde;
+	}
+
+	public static void setHorasTarde(String[] horasTarde) {
+		FechaUtil.horasTarde = horasTarde;
+	}
+
+	public static String[] getHorasNoche() {
+		return horasNoche;
+	}
+
+	public static void setHorasNoche(String[] horasNoche) {
+		FechaUtil.horasNoche = horasNoche;
+	}
+	
 
 	public static String[] getMinutos() {
 		return minutos;
@@ -87,5 +109,6 @@ public class FechaUtil {
 	public void setMinutos(String[] minutos) {
 		this.minutos = minutos;
 	}
+	
 	
 }

@@ -80,12 +80,13 @@ public class PanelAltaTurno extends JPanel implements ActionListener {
 			public void itemStateChanged(ItemEvent evento) {
 				if (evento.getStateChange()== ItemEvent.SELECTED) {
 					seleccion= terapistaComboBox.getSelectedItem().toString().split(" ");
+					llenarHoras();
 					
 				}	
 			}
 		});
 		
-		horaInicioComboBox = new JComboBox(FechaUtil.getHoras());
+		horaInicioComboBox = new JComboBox();
 		horaInicioComboBox.setBounds(52, 121, 79, 22);
 		horaInicioComboBox.setMaximumRowCount(5);
 		add(horaInicioComboBox);
@@ -145,13 +146,12 @@ public class PanelAltaTurno extends JPanel implements ActionListener {
 	private void limpiarFormulario() {
 		terapistaComboBox.removeAllItems();
 		diaChooser.setDate(null);
-		horaInicioComboBox.setSelectedIndex(0);
+		horaInicioComboBox.removeAllItems();
 		minutoInicioComboBox.setSelectedIndex(0);
 	}
 	
 	public void llenarComboTerapista() {
 		terapistaServ= new TerapistaService();
-		
 		
 		try {
 			List<String> terapistas= terapistaServ.listarTerapistas();
@@ -163,5 +163,34 @@ public class PanelAltaTurno extends JPanel implements ActionListener {
 			panelManager.mostrarError(es);
 		}
 		
+	}
+	
+	private void llenarHoras() {
+		TerapistaService terapistaServ= new TerapistaService();
+		String turnoTerapista= null;
+		String lista[]= {};
+		
+		horaInicioComboBox.removeAllItems();
+		
+		try {
+			turnoTerapista= terapistaServ.obtenerTurnoTerapista(seleccion[0], seleccion[1]);
+			
+			if(turnoTerapista.equals("m")) {
+				lista= FechaUtil.getHorasManana();
+			} else if(turnoTerapista.equals("t")) {
+				lista= FechaUtil.getHorasTarde();
+			} else if(turnoTerapista.equals("n")) {
+				lista= FechaUtil.getHorasNoche();
+			} else {
+				panelManager.mostrarError("Turno no existe");
+			}
+			
+			for(int i= 0; i < lista.length; i++) {
+				horaInicioComboBox.addItem(lista[i]);
+			}
+				
+		} catch (ServicioException es) {
+			panelManager.mostrarError(es);
+		}
 	}
 }

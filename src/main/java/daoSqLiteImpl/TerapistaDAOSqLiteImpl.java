@@ -17,10 +17,12 @@ public class TerapistaDAOSqLiteImpl extends DAOSqLiteImpl implements TerapistaDA
 		conectar();
 		
 		try {
-			PreparedStatement ps= getConexion().prepareStatement("INSERT INTO terapista (nombre, apellido) VALUES (?,?)");
+			
+			PreparedStatement ps= getConexion().prepareStatement("INSERT INTO terapista (nombre, apellido, turno) VALUES (?,?, ?)");
 			
 			ps.setString(1, unTerapista.getNombre());
 			ps.setString(2, unTerapista.getApellido());
+			ps.setString(3, unTerapista.getTurno());
 			
 			ps.executeUpdate();
 			
@@ -110,6 +112,33 @@ public class TerapistaDAOSqLiteImpl extends DAOSqLiteImpl implements TerapistaDA
         return resultado;
 	}
 	
+	public Terapista obtenerTerapista(String nombre, String apellido) throws DAOException{
+		Terapista resultado= null;
+		
+		conectar();
+		
+		try {
+			PreparedStatement ps= getConexion().prepareStatement("SELECT * FROM terapista WHERE nombre= ? and apellido= ?");
+        	ps.setString(1, nombre);
+			ps.setString(2,  apellido);
+			
+			ResultSet rs= ps.executeQuery();
+			
+			if (rs.next()) {	
+            	resultado= construirTerapista(rs);
+            } else {
+            	throw new DAOException("No existe el terapista");
+            }
+			
+		} catch (SQLException e) {
+        	throw new DAOException("Error al buscar terapista");
+        } finally {
+            cerrarConexion();
+        }
+		
+		return resultado;
+	}
+	
 	public void borrarTerapista(String nombre, String apellido) throws DAOException {
 		conectar();
 		
@@ -128,14 +157,16 @@ public class TerapistaDAOSqLiteImpl extends DAOSqLiteImpl implements TerapistaDA
 		}
 	}
 	
-	public void modificarTerapista(int idTerapista, String nombre, String apellido) throws DAOException {
+	
+	public void modificarTerapista(int idTerapista, String nombre, String apellido, String turno) throws DAOException {
 		conectar();
 		
 		try {
-			PreparedStatement ps= getConexion().prepareStatement("UPDATE terapista SET nombre= ?, apellido= ? where id_terapista= ?");
+			PreparedStatement ps= getConexion().prepareStatement("UPDATE terapista SET nombre= ?, apellido= ?, turno= ? where id_terapista= ?");
 			ps.setString(1, nombre);
 			ps.setString(2, apellido);
-			ps.setInt(3, idTerapista);
+			ps.setString(3, turno);
+			ps.setInt(4, idTerapista);
 			
 			ps.executeUpdate();
 			
@@ -147,11 +178,13 @@ public class TerapistaDAOSqLiteImpl extends DAOSqLiteImpl implements TerapistaDA
 		}
 	}
 	
+	
 	public Terapista construirTerapista(ResultSet rs) throws SQLException {
 		Terapista terapista= new Terapista();
 		
 		terapista.setNombre(rs.getString("nombre"));
 		terapista.setApellido(rs.getString("apellido"));
+		terapista.setTurno(rs.getString("turno"));
 		
 		return terapista;
 	}

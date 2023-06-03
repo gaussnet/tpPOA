@@ -48,11 +48,11 @@ public class TerapistaService {
         }
 	}
 	
-	public void modificarTerapista(int idTerapista, String nombre, String apellido) throws ServicioException {
+	public void modificarTerapista(int idTerapista, String nombre, String apellido, String turno) throws ServicioException {
 		TerapistaDAO dao= new TerapistaDAOSqLiteImpl();
 		
 		try {
-			dao.modificarTerapista(idTerapista, nombre, apellido);
+			dao.modificarTerapista(idTerapista, nombre, apellido, turno);
 			
 		} catch (DAOException e) {
             throw new ServicioException(e);
@@ -69,6 +69,19 @@ public class TerapistaService {
         }
 		
 		return idTerapista;
+	}
+	
+	public String obtenerTurnoTerapista(String nombre, String apellido) throws ServicioException {
+		TerapistaDAO dao= new TerapistaDAOSqLiteImpl();
+		String turnoTerapista= null;
+		
+		try {
+			turnoTerapista= dao.obtenerTerapista(nombre, apellido).getTurno();
+		}catch (DAOException e) {
+            throw new ServicioException(e);
+        }
+		
+		return turnoTerapista;
 	}
 	
 	public List<String> listarTerapistas() throws ServicioException {
