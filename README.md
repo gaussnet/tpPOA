@@ -51,3 +51,13 @@ artifactId: tpPOA
 	</dependency>
 </dependencies>
 ```
+
+## Importar proyecto:
+- Importar los archivos
+- Editar el archivo pom.xml con la versión correspondiente de Java
+- Actualizar el proyecto Maven
+
+## Ejecutar aplicación:
+- Compilar y ejecutar el archivo principal.class
+
+
